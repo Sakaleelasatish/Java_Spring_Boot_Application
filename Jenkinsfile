@@ -19,7 +19,7 @@ pipeline {
             steps {
                 // Build the Docker image using the Dockerfile
                 script {
-                    docker build -t hello-world-app .
+                    sh 'docker build -t hello-world-app .'
                 }
             }
         }
@@ -28,8 +28,9 @@ pipeline {
             steps {
                 // Run the Docker container from the built image
                 script {
-                    docker run -itd --name hello-world-container -p 9090:9090 hello-world-app
+                    sh 'docker run -itd --name hello-world-container -p 9090:9090 hello-world-app'
                 }
             }
         }
     }
+}
