@@ -11,5 +11,3 @@ COPY target/jb-hello-world-maven-0.1.0.jar /app/jb-hello-world-maven-0.1.0.jar
 EXPOSE 9090
 
 # Run the jar file
-ENTRYPOINT ["java", "-jar", "jb-hello-world-maven-0.1.0.jar"]
-
