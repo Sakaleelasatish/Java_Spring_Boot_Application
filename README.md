@@ -88,7 +88,7 @@ docker build -t hello-world-app .
 
 Running the Docker Container
 To run the Docker container, use the following command:
-docker run -p 9090:9090 hello-world-app
+docker run -itd --name hello-world-container1 -p 9090:9090 hello-world-app
 
 
 The application will be accessible at http://localhost:9090
