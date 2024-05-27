@@ -55,8 +55,151 @@ Java 11
 Maven
 Docker
 Jenkins
+Goto AWS account and launch instance with t2.medium and AMi is amazon linux
+
+sudo su -
+yum install -y git  maven docker
+
+git --version
+maven --version
+docker --version
+
+Enable and start the service :docker
+
+systemctl enable docker
+systemctl start docker
+systemctl status docker
+
+connection to git hub to server
+============================================================
+git config --global user.emailid sakaleelasatish@gmail.com
+git config --global user.name sakaleelasatish
+git config --global credential.helper store
 
 
+ls -la
+
+cat .gitconfig
+
+[user]
+        emailid = yourgithubmail@gmail.com
+        name = githubusername
+[credential]
+        helper = store
+
+
+for token 
+===============
+==>go to github account
+--->settings
+--->developer settings
+--->personal access tokens
+--->Token(classic)-->
+Generate new token
+--> Generate new token classic
+-->NOTE[give note here]
+-->select scopes
+--> Generete Token
+==>copy token in notepad
+
+go to instance in Mobaxterm
+
+yum install -y nano
+
+nano ~/.git-credentials          #Create .git-credentils
+
+ctrl+x to exit the nano 
+press y
+press enter
+
+https://<YOUR_GITHUB_USERNAME>:<YOUR_PAT>@github.com
+
+Clone your Project repo
+git clone https://github.com/Sakaleelasatish/Java_Spring_Boot_Application.git
+ls
+Java_Spring_Boot_Application
+
+cd Java_Spring_Boot_Application
+
+ls
+
+Dockerfile  Jenkinsfile  pom.xml  README.md  src target
+
+do some modifications
+
+git add .
+git commit -m "commit msg"
+git push origin main
+webhook configuration to your project
+go to github account
+--> go to project repo
+--> on top select settings
+-->click webhooks(on leftside) 
+-->Add webhook
+-->payload url* http://local-host:8080/github-webhook/ 
+--> content type select application/json   
+--> Which events would you like to trigger this webhook? --? select Send me everything
+--> ADD WEBHOOK
+
+
+
+
+-jenkins installation --
+
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+
+---java installation---
+
+  yum install fontconfig java-11*
+  yum install jenkins
+
+Enable and start the service :
+
+systemctl enable jenkins
+systemctl start jenkins
+systemctl status jenkins
+
+
+edit inbound rules in the jenkins server add 8080(default port number for jenkins)
+http://ipaddress:8080
+then you successfully run the jenkins server
+
+once open the jenkins server
+copy /var/lib/jenkins/secrets/initialAdminPassword
+
+ then you can paste in the mobaxterm by using cat command
+cat /var/lib/jenkins/secrets/initialAdminPassword 
+then you get the password copy and paste it in the jenkins server
+and select suggested  plugins
+Create user account  
+Name : admin
+Password : admin
+Confirm Password : admin
+Full Name:
+Email id :
+
+then dashboard of jenkins will open
+
+To create a job in jenkins
+go to jenkins
+--> go to dashboard-->select new item--> Enter an item name: #my-java-project  --> select pipeline --> click OK 
+-->general--> Description--> Gitthub project : https://github.com/Sakaleelasatish/Java_Spring_Boot_Application.git
+--> Build triggers-->select GitHub hook trigger for GITScm polling
+-->Pipeline
+   Definition
+   select pipeline script from scm
+    --> SCM : GIT
+    --> Repository url  https://github.com/Sakaleelasatish/Java_Spring_Boot_Application.git
+    --> Branch */main
+    save
+Build the project by clicking the button Buildnow
+
+
+
+[Manually]
+{---
 Building the Project
 To build the project, navigate to the project root directory and run the following command:
 
@@ -71,13 +214,9 @@ Running the Application
 To run the application using the JAR file:
 
 
-java -jar target/jb-hello-world-maven-0.1.0.jar
+java -jar target/jb-hello-world-maven-0.1.0.jar    ---}
 
-
-
-
-The application will start and be accessible at http://localhost:9090
-
+The application will start and be accessible at http://localhost:9090  
 
 
 Docker Setup
