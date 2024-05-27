@@ -196,6 +196,11 @@ go to jenkins
     save
 Build the project by clicking the button Buildnow
 
+edit inbound rules in the jenkins server add 9090(To access our application)
+
+http://publicipaddress:9090
+
+then you successfully run the Java_Spring_Boot_Application
 
 
 [Manually]
