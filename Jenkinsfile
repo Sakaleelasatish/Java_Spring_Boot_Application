@@ -1,34 +1,60 @@
 pipeline {
     agent any
 
+    environment {
+        ECR_REPOSITORY = 'your-account-id.dkr.ecr.your-region.amazonaws.com/hello-world-app'
+        ECR_LOGIN = 'aws ecr get-login-password --region your-region | docker login --username AWS --password-stdin your-account-id.dkr.ecr.your-region.amazonaws.com'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/Sakaleelasatish/Java_Spring_Boot_Application.git']])
+                checkout scm
             }
         }
 
         stage('Build') {
             steps {
-                // Clean and package the Maven project
                 sh 'mvn clean package'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh 'mvn sonar:sonar'
+                }
+            }
+        }
+
+        stage('Nexus Deployment') {
+            steps {
+                sh 'mvn clean deploy'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                // Build the Docker image using the Dockerfile
                 script {
                     sh 'docker build -t hello-world-app .'
                 }
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Push Docker Image to ECR') {
             steps {
-                // Run the Docker container from the built image
                 script {
-                    sh 'docker run -itd --name hello-world-container -p 9090:9090 hello-world-app'
+                    sh ECR_LOGIN
+                    sh "docker tag hello-world-app:latest ${ECR_REPOSITORY}:latest"
+                    sh "docker push ${ECR_REPOSITORY}:latest"
+                }
+            }
+        }
+
+        stage('Deploy to EKS') {
+            steps {
+                script {
+                    sh 'helm upgrade --install hello-world-app ./hello-world-app --set image.repository=${ECR_REPOSITORY} --set image.tag=latest'
                 }
             }
         }
