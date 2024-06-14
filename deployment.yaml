@@ -16,6 +16,7 @@ spec:
       containers:
       - name: my-app
         image: jsbimg:latest
+        imagePullPolicy: Always 
         ports:
         - containerPort: 9090
 
