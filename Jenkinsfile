@@ -36,7 +36,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh 'docker build -t hello-world-app .'
+                    sh 'docker build -t jsbimg .'
                 }
             }
         }
